@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxb.warehouseservice.dao.WarehouseDao">
+    <resultMap type="com.yxb.warehouseservice.entity.Warehouse" id="BaseResultMap">
+        <id column="id" property="id"/>
+        <result column="product_id" property="productId"/>
+        <result column="total_inventory" property="totalInventory"/>
+        <result column="lock_inventory" property="lockInventory"/>
+        <result column="valid_inventory" property="validInventory"/>
+    </resultMap>
+    <update id="tryWarehouse">
+        update tcc_warehouse set lock_inventory=lock_inventory+#{amount},valid_inventory=total_inventory-#{amount} where product_id =#{productId}
+    </update>
+    <update id="confirmWarehouse">
+        update tcc_warehouse set total_inventory=total_inventory-#{amount}, lock_inventory=lock_inventory-#{amount} where product_id =#{productId}
+    </update>
+    <update id="cancelWarehouse" >
+        update tcc_warehouse set lock_inventory=lock_inventory-#{amount},valid_inventory=valid_inventory+#{amount} where product_id =#{productId}
+    </update>
+</mapper>
